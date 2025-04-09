@@ -1,0 +1,20 @@
+{
+    "name": "mblocks",
+    "version": "1.0.4",
+    "description": "Library by Alex Merced of AlexMercedCoder.com (AlexMercedCoder.com/jslib)",
+    "main": "blocknpm.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AlexMercedCoder/mBlocks.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/AlexMercedCoder/mBlocks/issues"
+    },
+    "homepage": "https://github.com/AlexMercedCoder/mBlocks#readme"
+}

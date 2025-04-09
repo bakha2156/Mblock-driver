@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+      .main-content {
+        display: grid;
+        grid-template-columns: repeat(3, 80px);
+        grid-template-rows: repeat(3, 80px);
+        gap: 10px;
+      }
+      .btn {
+        width: 80px;
+        user-select: none;
+        -webkit-user-select: none;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        background-color: bisque;
+        border-radius: 16px;
+      }
+      .btn:hover {
+        background-color: beige;
+      }
+      .btn:active {
+        transform: scale(0.95);
+      }
+      .btn.up {
+        grid-column: 2;
+        grid-row: 1;
+      }
+      .btn.left {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      .btn.revers {
+        grid-column: 2;
+        grid-row: 2;
+        background-color:rgb(248, 208, 150);
+      }
+      .btn.revers:hover {
+        background-color:beige;
+      }
+      .btn.right {
+        grid-column: 3;
+        grid-row: 2;
+      }
+      .btn.back {
+        grid-column: 2;
+        grid-row: 3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Пульт управление роботом</h1>
+    <div class="main-content">
+      <button class="btn up" onmousedown="sendCommand(1)" onmouseup="sendCommand(5)">up</button>
+      <button class="btn left"  onmousedown="sendCommand(2)" onmouseup="sendCommand(5)">left</button>
+      <button class="btn revers" onmousedown="sendCommand(3)" onmouseup="sendCommand(5)">revers</button>
+      <button class="btn right" onmousedown="sendCommand(4)" onmouseup="sendCommand(5)">rigth</button>
+      <button class="btn back" onmousedown="sendCommand(6)" onmouseup="sendCommand(5)">back</button>
+    </div>
+    <script>
+        function sendCommand(cmd){
+            fetch("/control?command="+cmd)
+            .then(r => r.text())
+            .then(data => console.log(data)
+            );
+        }
+    </script>
+  </body>
+</html>
+
+<!--  -->
+<!-- #include "MeMCore.h"
+
+MeDCMotor motorLeft(M1);  // Левый мотор
+MeDCMotor motorRight(M2); // Правый мотор
+uint8_t motorSpeed = 100;
+
+char command = 0;  // Переменная для хранения команды
+
+void setup() {
+  Serial.begin(115200);  // Используем аппаратный Serial для отладки
+}
+
+void loop() {
+  if (Serial.available()) {
+    command = Serial.read();  // Читаем символ
+    Serial.print("Получена команда: ");
+    Serial.println(command);  // Выводим в Serial Monitor
+  }
+
+  // Обработка команд
+  if (command == '1') {  // Вперёд
+    Serial.println("mBot двигается вперёд");
+    motorLeft.run(-100);
+    motorRight.run(motorSpeed);
+  } else if (command == '2') {  // Назад
+    Serial.println("mBot двигается назад");
+    motorLeft.run(motorSpeed);
+    motorRight.run(-motorSpeed);
+  } else if (command == '3') {  // Поворот влево
+    Serial.println("mBot поворачивает влево");
+    motorLeft.run(motorSpeed);
+    motorRight.run(motorSpeed);
+  } else if (command == '4') {  // Поворот вправо
+    Serial.println("mBot поворачивает вправо");
+    motorLeft.run(-motorSpeed);
+    motorRight.run(-motorSpeed);
+  } else if (command == '5') {  // Остановка
+    Serial.println("mBot остановлен");
+    motorLeft.stop();
+    motorRight.stop();
+  } else if (command == '6') {  // Остановка
+    Serial.println("mBot остановлен");
+    motorLeft.run(motorSpeed);
+    motorRight.run(motorSpeed);
+    delay(2500);
+    motorLeft.stop();
+    motorRight.stop();
+  } else if (command == '0') {  // Остановка
+    Serial.println("mBot остановлен");
+    motorLeft.stop();
+    motorRight.stop();
+  }
+} -->
+  <!--  -->
+<!-- #include <ESP8266WiFi.h>
+    #include <ESP8266WebServer.h>
+    
+    ESP8266WebServer server(80);
+    
+    const char* ap_ssid = "Robot-Control";
+    const char* ap_password = "12345678";
+    
+    String htmlPage = R"rawliteral(
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Пульт управления роботом</title>
+      <style>
+        body {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          background-color: #f0f0f0;
+          font-family: Arial, sans-serif;
+          text-align: center;
+        }
+        .controller {
+          display: grid;
+          grid-template-columns: repeat(3, 80px);
+          grid-template-rows: repeat(3, 80px);
+          gap: 10px;
+          background: white;
+          padding: 20px;
+          border-radius: 20px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 80px;
+          height: 80px;
+          font-size: 24px;
+          border: none;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: 0.2s;
+          background-color: #4CAF50;
+          color: white;
+          user-select: none;
+          -webkit-user-select: none;
+        }
+        .button:hover {
+          background-color: #45a049;
+        }
+        .button:active {
+          transform: scale(0.95);
+        }
+        .up { grid-column: 2; background: #4a90e2; }
+        .left { grid-column: 1; grid-row: 2; background: #4a90e2; }
+        .stop { grid-column: 2; grid-row: 2; background: #f39c12; font-weight: bold; } /* Жёлтая кнопка */
+        .right { grid-column: 3; grid-row: 2; background: #4a90e2; }
+        .down { grid-column: 2; grid-row: 3; background: #4a90e2; }
+      </style>
+    </head>
+    <body>
+      <h1>Пульт управления роботом</h1>
+      <div class="controller">
+        <button class="button up" onmousedown="sendCommand(1)" onmouseup="sendCommand(5)" ontouchstart="sendCommand(1)" ontouchend="sendCommand(5)">⬆</button>
+        <button class="button left" onmousedown="sendCommand(3)" onmouseup="sendCommand(5)" ontouchstart="sendCommand(3)" ontouchend="sendCommand(5)">⬅</button>
+        <button class="button stop" onclick="sendCommand(6)">🔄</button>
+        <button class="button right" onmousedown="sendCommand(4)" onmouseup="sendCommand(5)" ontouchstart="sendCommand(4)" ontouchend="sendCommand(5)">➡</button>
+        <button class="button down" onmousedown="sendCommand(2)" onmouseup="sendCommand(5)" ontouchstart="sendCommand(2)" ontouchend="sendCommand(5)">⬇</button>
+      </div>
+      <script>
+        function sendCommand(cmd) {
+          fetch("/control?command=" + cmd)
+            .then(r => r.text())
+            .then(data => console.log(data));
+        }
+      </script>
+    </body>
+    </html>
+    )rawliteral";
+    
+    void setup() {
+      Serial.begin(115200);
+      WiFi.softAP(ap_ssid, ap_password);
+      Serial.println("Точка доступа запущена");
+      Serial.print("IP адрес: ");
+      Serial.println(WiFi.softAPIP());
+    
+      server.on("/", HTTP_GET, []() {
+        server.send(200, "text/html", htmlPage);
+      });
+    
+      server.on("/control", HTTP_GET, []() {
+        String command = server.arg("command");
+        if (command.length() > 0) {
+          Serial.println("Команда: " + command);
+        }
+        server.send(200, "text/plain", "Команда получена: " + command);
+      });
+    
+      server.begin();
+      Serial.println("Веб-сервер запущен");
+    }
+    
+    void loop() {
+      server.handleClient();
+    }  -->
